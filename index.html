@@ -1,0 +1,98 @@
+<!doctype html><html lang="zh"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>打卡仪表盘</title>
+<style>
+:root{--fg:#1c1c1e;--muted:#8e8e93;--green:#34c759;--red:#ff3b30;--gray:#c7c7cc;
+--floor:#0a84ff;--bg:#f2f2f7;--card:#fff;--accent:#007aff}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);font-family:-apple-system,"PingFang SC",sans-serif;
+color:var(--fg);-webkit-tap-highlight-color:transparent}
+.wrap{max-width:1020px;margin:0 auto;padding:16px}
+header{display:flex;justify-content:space-between;align-items:baseline;padding:4px 2px 10px}
+h1{font-size:24px;margin:0}
+.updated{color:var(--muted);font-size:12px}
+.tabs{display:flex;gap:8px;margin-bottom:12px}
+.tab{flex:1;padding:10px;border:none;border-radius:12px;background:var(--card);
+font-size:15px;color:var(--muted);cursor:pointer;box-shadow:0 1px 3px rgba(0,0,0,.06)}
+.tab.active{background:var(--accent);color:#fff}
+.summary{font-size:13px;color:var(--muted);margin:0 0 8px 2px}
+.chart{overflow-x:auto;-webkit-overflow-scrolling:touch;background:var(--card);
+border-radius:16px;padding:14px 10px 6px;box-shadow:0 1px 4px rgba(0,0,0,.06)}
+.track{display:flex;align-items:flex-end;gap:6px;min-width:max-content;height:220px}
+.col{flex:0 0 46px;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;
+cursor:pointer;position:relative;height:100%}
+.bar{width:30px;border-radius:5px 5px 0 0;transition:height .2s}
+.col.ok .bar{background:var(--green)} .col.miss .bar{background:var(--red)}
+.col.none .bar{background:var(--gray)}
+.col.sel{outline:2px solid var(--accent);outline-offset:2px;border-radius:8px}
+.ftick{position:absolute;width:34px;height:2px;background:var(--floor);opacity:.7}
+.mlabel{font-size:11px;color:var(--fg);margin-top:3px}
+.dlabel{font-size:11px;color:var(--muted);margin-top:2px}
+.detail{background:var(--card);border-radius:16px;padding:16px;margin-top:12px;
+box-shadow:0 1px 4px rgba(0,0,0,.06)}
+.detail h2{font-size:17px;margin:0 0 8px}
+.pill{display:inline-block;padding:2px 10px;border-radius:99px;font-size:12px;margin-left:8px}
+.pill.ok{background:#dff7e6;color:#1d7a3c} .pill.miss{background:#ffe3e0;color:#c0392b}
+.pill.none{background:#eee;color:#8e8e93}
+.entry{display:flex;justify-content:space-between;align-items:baseline;padding:7px 0;
+border-bottom:1px solid #f0f0f0;font-size:14px}
+.entry:last-child{border-bottom:none}
+.entry .r{color:var(--muted);font-size:13px;white-space:nowrap}
+.empty{color:var(--muted);font-size:14px;padding:10px 0}
+.hint{color:var(--muted);font-size:12px;text-align:center;margin-top:14px}
+</style></head><body><div class="wrap">
+<header><h1>📊 打卡仪表盘</h1><span class="updated" id="updated"></span></header>
+<div class="tabs" id="tabs"></div>
+<p class="summary" id="summary"></p>
+<div class="chart"><div class="track" id="track"></div></div>
+<div class="detail" id="detail"></div>
+<p class="hint">← 左右滑动看全部日期 · 点柱子看当天明细 · 绿=达标 红=未达标 蓝杠=保底线</p>
+</div>
+<script>
+const DATA={"updated": "2026-10-07 02:18", "week": "2026-W41", "start": "2026-10-06", "people": [{"code": "pascal", "name": "Pascal", "days": [{"d": "2026-10-06", "study": 0, "floor": 60, "status": "miss", "e": []}, {"d": "2026-10-07", "study": 90, "floor": 60, "status": "ok", "e": [{"k": "start", "t": null, "m": 60, "c": "学Python"}, {"k": "done", "t": null, "m": 90, "c": "学Python"}, {"k": "log_start", "t": "02:11", "m": 0, "c": "打游戏"}]}]}, {"code": "rora", "name": "Rora", "days": [{"d": "2026-10-06", "study": 0, "floor": 240, "status": "miss", "e": []}, {"d": "2026-10-07", "study": 180, "floor": 240, "status": "miss", "e": [{"k": "done", "t": null, "m": 180, "c": "学SQL"}]}]}], "labels": {"start": "⏱ 学习开始", "done": "✅ 学习", "log": "📌 打卡", "log_start": "📌 开始", "log_done": "📌 结束", "wake": "🌅 起床", "sleep": "😴 睡了", "work": "💼 上班", "card": "🎟 用卡", "ride": "🚲 骑行", "car": "🚗 练车", "bonus": "➕ 加分", "emergency": "🟡 应急(旧)"}};
+const LAB=DATA.labels;
+let curP=0, curD=DATA.people[0].days.length-1;
+document.getElementById('updated').textContent=DATA.week+' · 更新 '+DATA.updated+' · 60s 自动刷新';
+const tabs=document.getElementById('tabs');
+DATA.people.forEach((p,i)=>{const b=document.createElement('button');
+ b.className='tab'+(i===0?' active':'');b.textContent=p.name;
+ b.onclick=()=>{curP=i;curD=DATA.people[i].days.length-1;selPerson();render();};
+ tabs.appendChild(b);});
+function selPerson(){[...tabs.children].forEach((t,i)=>t.className='tab'+(i===curP?' active':''));}
+function fmt(m){if(!m)return'0';if(m<60)return m+'m';const h=Math.floor(m/60),mm=m%60;
+ return h+'h'+(mm?String(mm).padStart(2,'0'):'');}
+function render(){
+ const p=DATA.people[curP],days=p.days;
+ document.getElementById('summary').textContent=
+   p.name+' · '+days.length+' 天 · 达标 '+
+   days.filter(d=>d.status==='ok').length+'/'+
+   days.filter(d=>d.status!=='none').length+' · 累计 '+fmt(days.reduce((a,b)=>a+b.study,0));
+ const max=Math.max(60,...days.map(d=>Math.max(d.study,d.floor)));
+ const track=document.getElementById('track');track.innerHTML='';
+ days.forEach((d,i)=>{
+  const col=document.createElement('div');col.className='col '+d.status+(i===curD?' sel':'');
+  const bar=document.createElement('div');bar.className='bar';
+  bar.style.height=Math.max(2,Math.round(200*d.study/max))+'px';col.appendChild(bar);
+  if(d.floor>0){const f=document.createElement('div');f.className='ftick';
+   f.style.bottom=Math.round(200*d.floor/max)+'px';col.appendChild(f);}
+  const ml=document.createElement('div');ml.className='mlabel';ml.textContent=fmt(d.study);
+  col.appendChild(ml);
+  const dl=document.createElement('div');dl.className='dlabel';
+  dl.textContent=d.d.slice(5).replace('-','/');col.appendChild(dl);
+  col.onclick=()=>{curD=i;render();};
+  track.appendChild(col);
+ });
+ const d=days[curD],det=document.getElementById('detail');
+ const pill=d.status==='ok'?'达标':(d.status==='miss'?'未达标':'无保底');
+ let h='<h2>'+d.d+'<span class="pill '+d.status+'">'+pill+'</span>'+
+   '<span style="font-size:13px;color:#8e8e93;margin-left:8px">学习 '+fmt(d.study)+'/'+fmt(d.floor)+'</span></h2>';
+ if(!d.e.length)h+='<div class="empty">这天没有记录</div>';
+ else d.e.forEach(e=>{
+   const label=LAB[e.k]||e.k;
+   const right=(e.t?e.t+' ':'')+(e.m?fmt(e.m):'');
+   h+='<div class="entry"><span>'+label+' · '+(e.c||'（无内容）')+'</span>'+
+      '<span class="r">'+right+'</span></div>';});
+ det.innerHTML=h;
+}
+render();
+</script></body></html>
