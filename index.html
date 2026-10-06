@@ -30,14 +30,17 @@ cursor:pointer;position:relative;height:100%}
 .dlabel{font-size:11px;color:var(--muted);margin-top:2px}
 .detail{background:var(--card);border-radius:16px;padding:16px;margin-top:12px;
 box-shadow:0 1px 4px rgba(0,0,0,.06)}
-.detail h2{font-size:17px;margin:0 0 8px}
+.detail h2{font-size:17px;margin:0 0 4px}
+.daytot{font-size:13px;color:var(--muted);margin-bottom:10px}
 .pill{display:inline-block;padding:2px 10px;border-radius:99px;font-size:12px;margin-left:8px}
 .pill.ok{background:#dff7e6;color:#1d7a3c} .pill.miss{background:#ffe3e0;color:#c0392b}
 .pill.none{background:#eee;color:#8e8e93}
-.entry{display:flex;justify-content:space-between;align-items:baseline;padding:7px 0;
+.cathead{font-size:13px;color:var(--accent);margin:12px 0 4px;font-weight:600}
+.entry{display:flex;justify-content:space-between;align-items:baseline;padding:6px 0;
 border-bottom:1px solid #f0f0f0;font-size:14px}
 .entry:last-child{border-bottom:none}
-.entry .r{color:var(--muted);font-size:13px;white-space:nowrap}
+.entry .rng{color:var(--muted);font-size:13px}
+.entry .dur{color:var(--fg);font-weight:600;white-space:nowrap;font-size:13px}
 .empty{color:var(--muted);font-size:14px;padding:10px 0}
 .hint{color:var(--muted);font-size:12px;text-align:center;margin-top:14px}
 </style></head><body><div class="wrap">
@@ -49,8 +52,8 @@ border-bottom:1px solid #f0f0f0;font-size:14px}
 <p class="hint">← 左右滑动看全部日期 · 点柱子看当天明细 · 绿=达标 红=未达标 蓝杠=保底线</p>
 </div>
 <script>
-const DATA={"updated": "2026-10-07 02:25", "week": "2026-W41", "start": "2026-10-06", "people": [{"code": "pascal", "name": "Pascal", "days": [{"d": "2026-10-06", "study": 0, "floor": 60, "status": "miss", "e": []}, {"d": "2026-10-07", "study": 1, "floor": 60, "status": "miss", "e": [{"k": "log", "t": "01:45", "m": 0, "c": "打游戏"}, {"k": "log", "t": "01:47", "m": 0, "c": "打游戏"}, {"k": "start", "t": "01:47", "m": 0, "c": "学python"}, {"k": "done", "t": "01:48", "m": 1, "c": "学python"}, {"k": "wake", "t": "01:50", "m": 0, "c": ""}, {"k": "log", "t": "01:50", "m": 0, "c": "睡觉"}, {"k": "log_start", "t": "02:07", "m": 0, "c": "打游戏"}]}]}, {"code": "rora", "name": "Rora", "days": [{"d": "2026-10-06", "study": 0, "floor": 240, "status": "miss", "e": [{"k": "start", "t": "22:12", "m": 0, "c": "学习面向对象"}]}, {"d": "2026-10-07", "study": 0, "floor": 240, "status": "miss", "e": []}]}], "labels": {"start": "⏱ 学习开始", "done": "✅ 学习", "log": "📌 打卡", "log_start": "📌 开始", "log_done": "📌 结束", "wake": "🌅 起床", "sleep": "😴 睡了", "work": "💼 上班", "card": "🎟 用卡", "ride": "🚲 骑行", "car": "🚗 练车", "bonus": "➕ 加分", "emergency": "🟡 应急(旧)"}};
-const LAB=DATA.labels;
+const DATA={"updated": "2026-10-07 02:30", "week": "2026-W41", "start": "2026-10-06", "people": [{"code": "pascal", "name": "Pascal", "days": [{"d": "2026-10-06", "study": 0, "floor": 60, "status": "miss", "total": 0, "items": []}, {"d": "2026-10-07", "study": 1, "floor": 60, "status": "miss", "total": 1, "items": [{"cat": "log", "name": "打游戏", "range": "01:45", "dur": ""}, {"cat": "log", "name": "打游戏", "range": "01:47", "dur": ""}, {"cat": "study", "name": "学python", "range": "01:47 → 01:48", "dur": "1m"}, {"cat": "sleep", "name": "起床", "range": "01:50", "dur": ""}, {"cat": "log", "name": "睡觉", "range": "01:50", "dur": ""}, {"cat": "log", "name": "打游戏", "range": "02:07 开始（进行中）", "dur": ""}]}]}, {"code": "rora", "name": "Rora", "days": [{"d": "2026-10-06", "study": 0, "floor": 240, "status": "miss", "total": 0, "items": [{"cat": "study", "name": "学习面向对象", "range": "22:12 开始（进行中）", "dur": ""}]}, {"d": "2026-10-07", "study": 0, "floor": 240, "status": "miss", "total": 0, "items": []}]}], "cat_label": {"study": "📚 学习", "log": "🎮 通用打卡", "sleep": "😴 睡眠", "other": "🔧 其它"}};
+const CL=DATA.cat_label;
 let curP=0, curD=DATA.people[0].days.length-1;
 document.getElementById('updated').textContent=DATA.week+' · 更新 '+DATA.updated+' · 60s 自动刷新';
 const tabs=document.getElementById('tabs');
@@ -86,12 +89,18 @@ function render(){
  const pill=d.status==='ok'?'达标':(d.status==='miss'?'未达标':'无保底');
  let h='<h2>'+d.d+'<span class="pill '+d.status+'">'+pill+'</span>'+
    '<span style="font-size:13px;color:#8e8e93;margin-left:8px">学习 '+fmt(d.study)+'/'+fmt(d.floor)+'</span></h2>';
- if(!d.e.length)h+='<div class="empty">这天没有记录</div>';
- else d.e.forEach(e=>{
-   const label=LAB[e.k]||e.k;
-   const right=(e.t?e.t+' ':'')+(e.m?fmt(e.m):'');
-   h+='<div class="entry"><span>'+label+' · '+(e.c||'（无内容）')+'</span>'+
-      '<span class="r">'+right+'</span></div>';});
+ h+='<div class="daytot">⏱ 当天计时总时长 <b>'+fmt(d.total)+'</b>'+
+    (d.total>0?'（含通用打卡，不计入保底）':'')+'</div>';
+ if(!d.items.length)h+='<div class="empty">这天没有记录</div>';
+ else{
+  // 按类别分组展示（保持顺序）
+  let curCat=null;
+  d.items.forEach(it=>{
+   if(it.cat!==curCat){curCat=it.cat;h+='<div class="cathead">'+(CL[it.cat]||it.cat)+'</div>';}
+   h+='<div class="entry"><span>'+it.name+' <span class="rng">'+(it.range||'')+'</span></span>'+
+      '<span class="dur">'+it.dur+'</span></div>';
+  });
+ }
  det.innerHTML=h;
 }
 render();
