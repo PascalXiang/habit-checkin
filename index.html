@@ -62,7 +62,7 @@ border-bottom:1px solid #f0f0f0;font-size:14px}
 <p class="hint">← 左右滑动看全部日期 · 点柱子看当天明细 · 绿=达标 红=未达标 蓝杠=保底线</p>
 </div>
 <script>
-const DATA={"updated": "2026-10-07 11:45", "week": "2026-W41", "start": "2026-10-06", "people": [{"code": "pascal", "name": "Pascal", "days": [{"d": "2026-10-06", "study": 0, "floor": 60, "status": "miss", "total": 0, "items": []}, {"d": "2026-10-07", "study": 0, "floor": 60, "status": "miss", "total": 0, "items": [{"cat": "sleep", "name": "睡眠", "range": "睡 03:14 → 起 09:30", "dur": "6h16"}, {"cat": "other", "name": "上班", "range": "10:08", "dur": ""}]}], "weeks": [{"week": "2026-W41", "study": 0, "floor_days": 0, "days": 2}], "this_week": {"study": 0, "floor_days": 0, "days": 2}, "this_month": {"study": 0, "floor_days": 0, "days": 2}}, {"code": "rora", "name": "Rora", "days": [{"d": "2026-10-06", "study": 0, "floor": 240, "status": "miss", "total": 0, "items": []}, {"d": "2026-10-07", "study": 0, "floor": 240, "status": "miss", "total": 0, "items": [{"cat": "sleep", "name": "睡了", "range": "04:26 ⚠️ 待补起床时间", "dur": "", "warn": true}]}], "weeks": [{"week": "2026-W41", "study": 0, "floor_days": 0, "days": 2}], "this_week": {"study": 0, "floor_days": 0, "days": 2}, "this_month": {"study": 0, "floor_days": 0, "days": 2}}], "cat_label": {"study": "📚 学习", "log": "🎮 通用打卡", "sleep": "😴 睡眠", "other": "🔧 其它"}};
+const DATA={"updated": "2026-10-07 11:50", "week": "2026-W41", "start": "2026-10-06", "people": [{"code": "pascal", "name": "Pascal", "days": [{"d": "2026-10-06", "study": 0, "floor": 60, "status": "miss", "total": 0, "items": []}, {"d": "2026-10-07", "study": 0, "floor": 60, "status": "miss", "total": 0, "items": [{"cat": "sleep", "name": "睡眠", "range": "睡 03:14 → 起 09:30", "dur": "6h16"}, {"cat": "other", "name": "上班", "range": "10:08", "dur": ""}]}], "weeks": [{"week": "2026-W41", "study": 0, "floor_days": 0, "days": 2}], "this_week": {"study": 0, "floor_days": 0, "days": 2}, "this_month": {"study": 0, "floor_days": 0, "days": 2}, "balance": -7.0, "balance_trend": [{"week": "2026-W41", "balance": -7.0}]}, {"code": "rora", "name": "Rora", "days": [{"d": "2026-10-06", "study": 0, "floor": 240, "status": "miss", "total": 0, "items": []}, {"d": "2026-10-07", "study": 0, "floor": 240, "status": "miss", "total": 0, "items": [{"cat": "sleep", "name": "睡了", "range": "04:26 ⚠️ 待补起床时间", "dur": "", "warn": true}]}], "weeks": [{"week": "2026-W41", "study": 0, "floor_days": 0, "days": 2}], "this_week": {"study": 0, "floor_days": 0, "days": 2}, "this_month": {"study": 0, "floor_days": 0, "days": 2}, "balance": -7.0, "balance_trend": [{"week": "2026-W41", "balance": -7.0}]}], "cat_label": {"study": "📚 学习", "log": "🎮 通用打卡", "sleep": "😴 睡眠", "other": "🔧 其它"}};
 const CL=DATA.cat_label;
 let curP=0, curD=DATA.people[0].days.length-1, curW=DATA.people[0].weeks.length-1, mode='day';
 try{const p=parseInt(localStorage.getItem('hb_p'));if(p>=0&&p<DATA.people.length)curP=p;}catch(e){}
@@ -81,12 +81,32 @@ const segD=document.getElementById('segD'),segW=document.getElementById('segW');
 function selSeg(){segD.className=mode==='day'?'on':'';segW.className=mode==='week'?'on':'';}
 segD.onclick=()=>{mode='day';selSeg();render();};
 segW.onclick=()=>{mode='week';selSeg();render();};
+function sparkSVG(p){
+ const t=p.balance_trend;
+ if(!t||t.length<2)return '';
+ const W=110,H=32,pad=3;
+ const vals=t.map(x=>x.balance);
+ const mn=Math.min(...vals,0), mx=Math.max(...vals,0);
+ const rng=(mx-mn)||1;
+ const X=i=>pad+i*(W-2*pad)/(t.length-1);
+ const Y=v=>pad+(mx-v)/rng*(H-2*pad);
+ let d='M'+X(0).toFixed(1)+' '+Y(vals[0]).toFixed(1);
+ for(let i=1;i<vals.length;i++)d+=' L'+X(i).toFixed(1)+' '+Y(vals[i]).toFixed(1);
+ const zy=Y(0).toFixed(1);
+ const up=vals[vals.length-1]>=vals[0];
+ return '<svg width="'+W+'" height="'+H+'" style="display:block;margin-top:6px">'+
+  '<line x1="'+pad+'" y1="'+zy+'" x2="'+(W-pad)+'" y2="'+zy+'" stroke="#e5e5ea" stroke-width="1"/>'+
+  '<path d="'+d+'" fill="none" stroke="'+(up?'#34c759':'#ff3b30')+'" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>'+
+  '</svg>';
+}
 function cardHTML(p){
  const tw=p.this_week,tm=p.this_month,ym=DATA.updated.slice(0,7);
  return '<div class="card"><div class="t">本周 '+DATA.week+'</div><div class="v">'+
    '达标 '+tw.floor_days+'/'+tw.days+' 天 · '+fmt(tw.study)+'</div></div>'+
   '<div class="card"><div class="t">本月 '+ym+'</div><div class="v">'+
-   '达标 '+tm.floor_days+'/'+tm.days+' 天 · '+fmt(tm.study)+'</div></div>';
+   '达标 '+tm.floor_days+'/'+tm.days+' 天 · '+fmt(tm.study)+'</div></div>'+
+  '<div class="card"><div class="t">积分余额（周走势）</div><div class="v">'+p.balance+' 分</div>'+
+   sparkSVG(p)+'</div>';
 }
 function renderDays(p,days,track,det){
  const max=Math.max(60,...days.map(d=>Math.max(d.study,d.floor)));
