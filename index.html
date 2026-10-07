@@ -73,15 +73,15 @@ border-bottom:1px solid #f0f0f0;font-size:14px}
 <div class="cards" id="cards"></div>
 <div class="distsec" id="distsec"></div>
 <div class="distsec" id="mrsec"></div>
-<div class="seg"><button id="segD" class="on">📅 日</button><button id="segW">📈 周</button></div>
+<div class="seg"><button id="segD" class="on">📅 日</button><button id="segW">📈 周</button><button id="segM">🗓 月</button><button id="segY">📊 年</button></div>
 <div class="chart"><div class="track" id="track"></div></div>
 <div class="detail" id="detail"></div>
 <p class="hint">← 左右滑动看全部日期 · 点柱子看当天明细 · 绿=达标 红=未达标 蓝杠=保底线</p>
 </div>
 <script>
-const DATA={"updated": "2026-10-07 13:00", "week": "2026-W41", "start": "2026-10-06", "people": [{"code": "pascal", "name": "Pascal", "days": [{"d": "2026-10-06", "study": 0, "floor": 60, "status": "miss", "total": 0, "items": []}, {"d": "2026-10-07", "study": 0, "floor": 60, "status": "miss", "total": 0, "items": [{"cat": "sleep", "name": "睡眠", "range": "睡 03:14 → 起 09:30", "dur": "6h16"}, {"cat": "other", "name": "上班", "range": "10:08", "dur": ""}]}], "weeks": [{"week": "2026-W41", "study": 0, "floor_days": 0, "days": 2}], "this_week": {"study": 0, "floor_days": 0, "days": 2}, "this_month": {"study": 0, "floor_days": 0, "days": 2}, "balance": -7.0, "balance_trend": [{"week": "2026-W41", "balance": -7.0}], "card_dist": [], "fine_week": 0.0, "fine_total": 0, "rank": null, "total_floor": 0, "next_rank": "🥉 青铜", "remaining": 7, "rank_progress": 0, "at_top": false}, {"code": "rora", "name": "Rora", "days": [{"d": "2026-10-06", "study": 0, "floor": 240, "status": "miss", "total": 0, "items": []}, {"d": "2026-10-07", "study": 0, "floor": 240, "status": "miss", "total": 0, "items": [{"cat": "sleep", "name": "睡眠", "range": "睡 04:26 → 起 12:36", "dur": "8h10"}]}], "weeks": [{"week": "2026-W41", "study": 0, "floor_days": 0, "days": 2}], "this_week": {"study": 0, "floor_days": 0, "days": 2}, "this_month": {"study": 0, "floor_days": 0, "days": 2}, "balance": -7.0, "balance_trend": [{"week": "2026-W41", "balance": -7.0}], "card_dist": [], "fine_week": 0.0, "fine_total": 0, "rank": null, "total_floor": 0, "next_rank": "🥉 青铜", "remaining": 7, "rank_progress": 0, "at_top": false}], "cat_label": {"study": "📚 学习", "log": "🎮 通用打卡", "sleep": "😴 睡眠", "other": "🔧 其它"}, "transfer": null};
+const DATA={"updated": "2026-10-07 13:02", "week": "2026-W41", "start": "2026-10-06", "people": [{"code": "pascal", "name": "Pascal", "days": [{"d": "2026-10-06", "study": 0, "floor": 60, "status": "miss", "total": 0, "items": []}, {"d": "2026-10-07", "study": 0, "floor": 60, "status": "miss", "total": 0, "items": [{"cat": "sleep", "name": "睡眠", "range": "睡 03:14 → 起 09:30", "dur": "6h16"}, {"cat": "other", "name": "上班", "range": "10:08", "dur": ""}]}], "weeks": [{"week": "2026-W41", "label": "W41", "study": 0, "floor_days": 0, "days": 2}], "months": [{"month": "2026-10", "label": "10月", "study": 0, "floor_days": 0, "days": 2}], "years": [{"year": "2026", "label": "2026", "study": 0, "floor_days": 0, "days": 2}], "this_week": {"study": 0, "floor_days": 0, "days": 2}, "this_month": {"study": 0, "floor_days": 0, "days": 2}, "this_year": {"study": 0, "floor_days": 0, "days": 2}, "balance": -7.0, "balance_trend": [{"week": "2026-W41", "balance": -7.0}], "card_dist": [], "fine_week": 0.0, "fine_total": 0, "rank": null, "total_floor": 0, "next_rank": "🥉 青铜", "remaining": 7, "rank_progress": 0, "at_top": false}, {"code": "rora", "name": "Rora", "days": [{"d": "2026-10-06", "study": 0, "floor": 240, "status": "miss", "total": 0, "items": []}, {"d": "2026-10-07", "study": 0, "floor": 240, "status": "miss", "total": 0, "items": [{"cat": "sleep", "name": "睡眠", "range": "睡 04:26 → 起 12:36", "dur": "8h10"}]}], "weeks": [{"week": "2026-W41", "label": "W41", "study": 0, "floor_days": 0, "days": 2}], "months": [{"month": "2026-10", "label": "10月", "study": 0, "floor_days": 0, "days": 2}], "years": [{"year": "2026", "label": "2026", "study": 0, "floor_days": 0, "days": 2}], "this_week": {"study": 0, "floor_days": 0, "days": 2}, "this_month": {"study": 0, "floor_days": 0, "days": 2}, "this_year": {"study": 0, "floor_days": 0, "days": 2}, "balance": -7.0, "balance_trend": [{"week": "2026-W41", "balance": -7.0}], "card_dist": [], "fine_week": 0.0, "fine_total": 0, "rank": null, "total_floor": 0, "next_rank": "🥉 青铜", "remaining": 7, "rank_progress": 0, "at_top": false}], "cat_label": {"study": "📚 学习", "log": "🎮 通用打卡", "sleep": "😴 睡眠", "other": "🔧 其它"}, "transfer": null};
 const CL=DATA.cat_label;
-let curP=0, curD=DATA.people[0].days.length-1, curW=DATA.people[0].weeks.length-1, mode='day';
+let curP=0, curD=DATA.people[0].days.length-1, curW=DATA.people[0].weeks.length-1, curM=0, curY=0, mode='day';
 try{const p=parseInt(localStorage.getItem('hb_p'));if(p>=0&&p<DATA.people.length)curP=p;}catch(e){}
 try{const d=parseInt(localStorage.getItem('hb_d'));if(d>=0&&d<DATA.people[curP].days.length)curD=d;}catch(e){}
 function saveState(){try{localStorage.setItem('hb_p',curP);localStorage.setItem('hb_d',curD);}catch(e){}}
@@ -89,15 +89,19 @@ document.getElementById('updated').textContent=DATA.week+' · 更新 '+DATA.upda
 const tabs=document.getElementById('tabs');
 DATA.people.forEach((p,i)=>{const b=document.createElement('button');
  b.className='tab'+(i===0?' active':'');b.textContent=p.name;
- b.onclick=()=>{curP=i;curD=DATA.people[i].days.length-1;curW=DATA.people[i].weeks.length-1;selPerson();render();saveState();};
+ b.onclick=()=>{curP=i;curD=DATA.people[i].days.length-1;curW=DATA.people[i].weeks.length-1;curM=0;curY=0;selPerson();render();saveState();};
  tabs.appendChild(b);});
 function selPerson(){[...tabs.children].forEach((t,i)=>t.className='tab'+(i===curP?' active':''));}
 function fmt(m){if(!m)return'0';if(m<60)return m+'m';const h=Math.floor(m/60),mm=m%60;
  return h+'h'+(mm?String(mm).padStart(2,'0'):'');}
-const segD=document.getElementById('segD'),segW=document.getElementById('segW');
-function selSeg(){segD.className=mode==='day'?'on':'';segW.className=mode==='week'?'on':'';}
+const segD=document.getElementById('segD'),segW=document.getElementById('segW'),
+      segM=document.getElementById('segM'),segY=document.getElementById('segY');
+function selSeg(){segD.className=mode==='day'?'on':'';segW.className=mode==='week'?'on':'';
+ segM.className=mode==='month'?'on':'';segY.className=mode==='year'?'on':'';}
 segD.onclick=()=>{mode='day';selSeg();render();};
 segW.onclick=()=>{mode='week';selSeg();render();};
+segM.onclick=()=>{mode='month';selSeg();render();};
+segY.onclick=()=>{mode='year';selSeg();render();};
 function sparkSVG(p){
  const t=p.balance_trend;
  if(!t||t.length<2)return '';
@@ -157,29 +161,30 @@ function renderDays(p,days,track,det){
  }
  det.innerHTML=h;
 }
-function renderWeeks(p,track,det){
- const ws=p.weeks;
- if(!ws.length){track.innerHTML='';det.innerHTML='<div class="empty">还没有数据</div>';return;}
- if(curW>=ws.length)curW=ws.length-1;
- const max=Math.max(60,...ws.map(w=>w.study));
- ws.forEach((w,i)=>{
-  const col=document.createElement('div');col.className='col'+(i===curW?' sel':'');
+function renderAgg(list,title,track,det,getCur,setCur){
+ if(!list.length){track.innerHTML='';det.innerHTML='<div class="empty">还没有数据</div>';return;}
+ let cur=getCur();
+ if(cur>=list.length)cur=list.length-1;
+ const max=Math.max(60,...list.map(w=>w.study));
+ list.forEach((w,i)=>{
+  const col=document.createElement('div');col.className='col'+(i===cur?' sel':'');
   const bar=document.createElement('div');bar.className='bar';
   bar.style.background=w.floor_days>=5?'#34c759':(w.floor_days>=3?'#ff9500':'#ff3b30');
   bar.style.height=Math.max(2,Math.round(200*w.study/max))+'px';col.appendChild(bar);
   const ml=document.createElement('div');ml.className='mlabel';ml.textContent=fmt(w.study);
   col.appendChild(ml);
-  const dl=document.createElement('div');dl.className='dlabel';
-  dl.textContent=w.week.slice(5);col.appendChild(dl);
-  col.onclick=()=>{curW=i;render();};
+  const dl=document.createElement('div');dl.className='dlabel';dl.textContent=w.label;col.appendChild(dl);
+  col.onclick=()=>{setCur(i);render();};
   track.appendChild(col);
  });
- const w=ws[curW];
- let h='<h2>'+w.week+'<span class="pill" style="background:#e8e8f0;color:#555">周汇总</span></h2>';
+ const w=list[cur];
+ let h='<h2>'+w.label+'<span class="pill" style="background:#e8e8f0;color:#555">'+title+'</span></h2>';
  h+='<div class="daytot">学习 <b>'+fmt(w.study)+'</b> · 达标 <b>'+w.floor_days+'/'+w.days+'</b> 天</div>';
- h+='<div class="empty">点「📅 日」看每天明细</div>';
  det.innerHTML=h;
 }
+function renderWeeks(p,track,det){renderAgg(p.weeks,'周汇总',track,det,()=>curW,i=>{curW=i;});}
+function renderMonths(p,track,det){renderAgg(p.months,'月汇总',track,det,()=>curM,i=>{curM=i;});}
+function renderYears(p,track,det){renderAgg(p.years,'年汇总',track,det,()=>curY,i=>{curY=i;});}
 function distHTML(p){
  const d=p.card_dist||[];
  const total=d.reduce((a,b)=>a+b[1],0);
@@ -219,10 +224,12 @@ function render(){
  const track=document.getElementById('track'),det=document.getElementById('detail');
  track.innerHTML='';
  if(mode==='day')renderDays(p,days,track,det);
- else renderWeeks(p,track,det);
+ else if(mode==='week')renderWeeks(p,track,det);
+ else if(mode==='month')renderMonths(p,track,det);
+ else renderYears(p,track,det);
 }
 render();
-(function(){const sel=mode==='day'?curD:curW;const c=document.querySelectorAll('#track .col')[sel];if(c)c.scrollIntoView({inline:'center',block:'nearest'});})();
+(function(){const sel={day:curD,week:curW,month:curM,year:curY}[mode];const c=document.querySelectorAll('#track .col')[sel];if(c)c.scrollIntoView({inline:'center',block:'nearest'});})();
 // 60s 自刷新：带时间戳破 GitHub Pages 的 max-age=600 缓存
 setTimeout(function(){var u=new URL(location.href);u.searchParams.set('t',Date.now());location.replace(u.toString());},60000);
 </script></body></html>
