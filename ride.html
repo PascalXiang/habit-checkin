@@ -26,12 +26,15 @@ background:var(--card);box-shadow:var(--sh);font-size:12.5px;color:var(--fg2);te
 .tab{flex:1;padding:11px;border:none;border-radius:var(--r-md);background:var(--card);box-shadow:var(--sh);
 font:600 15px/1 inherit;color:var(--fg2);cursor:pointer}
 .tab.active{background:var(--accent);color:#fff}
+/* 注意：.person 只作 JS 钩子（子页 Tab 切换用 display 显隐），不需要任何样式 */
 .panel,.distsec,.detail,.chartbox{background:var(--card);border-radius:var(--r-lg);padding:16px;
 overflow-wrap:anywhere;
 box-shadow:var(--sh);margin:0 0 14px}
 .panel h2,.detail h2{font-size:16px;line-height:1.35;margin:0 0 10px;font-weight:700}
 .panel h3{font-size:12px;color:var(--muted);margin:16px 0 8px;font-weight:600;letter-spacing:.02em}
 .sec-t{font-size:12px;color:var(--muted);line-height:1.5;margin:0 0 10px}
+.sumline{font-size:13.5px;line-height:1.75;color:var(--fg2);margin:0 0 10px}
+.sumline b{color:var(--fg)}
 .summary{font-size:13px;line-height:1.6;color:var(--fg2);margin:0 0 12px}
 .cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:0 0 14px}
 @media(min-width:640px){.cards{grid-template-columns:repeat(4,minmax(0,1fr))}}
@@ -73,7 +76,7 @@ font-size:12.5px;color:var(--fg2);background:#f7f7fa}
 .cd.on{background:#ffd6e0;color:#c2185b;font-weight:700}
 .cd.today{outline:2px solid var(--accent);outline-offset:-2px}
 .pm-range{font-size:13px;line-height:2;margin:12px 0 0}
-</style></head><body><div class="wrap"><header><h1>🚲 骑行统计</h1><span class="updated">更新 2026-10-12 01:14</span></header><div class="nav"><a href="index.html">📊 学习</a><a href="sleep.html">😴 睡眠</a><a href="ride.html" class="on">🚲 骑行</a><a href="toilet.html">🚽 如厕</a><a href="period.html">🩸 经期</a></div><div class="tabs" id="tabs"></div><div class="person" data-name="Pascal"><div class="panel"><h2>🚲 Pascal 骑行</h2><p class="sumline">累计 <b>0 次</b> · <b>0 km</b> · 骑行 +1 分/次</p><p class="empty">还没骑过车（发「骑行 R1」或「骑行 15 公里」）</p></div></div><div class="person" data-name="Rora"><div class="panel"><h2>🚲 Rora 骑行</h2><p class="sumline">累计 <b>0 次</b> · <b>0 km</b> · 骑行 +1 分/次</p><p class="empty">还没骑过车（发「骑行 R1」或「骑行 15 公里」）</p></div></div><p class="hint">每 60 秒自动刷新</p><script>setTimeout(function(){var u=new URL(location.href);u.searchParams.set("t",Date.now());location.replace(u.toString());},60000);</script><script>
+</style></head><body><div class="wrap"><header><h1>🚲 骑行统计</h1><span class="updated">更新 2026-10-12 01:15</span></header><div class="nav"><a href="index.html">📊 学习</a><a href="sleep.html">😴 睡眠</a><a href="ride.html" class="on">🚲 骑行</a><a href="toilet.html">🚽 如厕</a><a href="period.html">🩸 经期</a></div><div class="tabs" id="tabs"></div><div class="person" data-name="Pascal"><div class="panel"><h2>🚲 Pascal 骑行</h2><p class="sumline">累计 <b>0 次</b> · <b>0 km</b> · 骑行 +1 分/次</p><p class="empty">还没骑过车（发「骑行 R1」或「骑行 15 公里」）</p></div></div><div class="person" data-name="Rora"><div class="panel"><h2>🚲 Rora 骑行</h2><p class="sumline">累计 <b>0 次</b> · <b>0 km</b> · 骑行 +1 分/次</p><p class="empty">还没骑过车（发「骑行 R1」或「骑行 15 公里」）</p></div></div><p class="hint">每 60 秒自动刷新</p><script>setTimeout(function(){var u=new URL(location.href);u.searchParams.set("t",Date.now());location.replace(u.toString());},60000);</script><script>
 (function(){
 var ps=[].slice.call(document.querySelectorAll('.person'));
 var tabsEl=document.getElementById('tabs');
